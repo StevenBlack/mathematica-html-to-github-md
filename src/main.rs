@@ -66,13 +66,11 @@ fn main() {
     let contents = regex.replace_all(contents.as_str(), "***$1***").to_string();
 
     // Transform bold text
-    let regex = Regex::new(r###"<span style='font-weight: bold;'>(.*)<\/span>"###).unwrap();
-    let mut contents = regex.replace_all(contents.as_str(), "**$1**").to_string();
+    let regex = Regex::new(r###"<span style='font-weight: bold;'>(.*?)<\/span>"###).unwrap();
+    let contents = regex.replace_all(contents.as_str(), "**$1**").to_string();
 
-    // Transform italic text
-    // need to make this ungreedy
-    // let regex = Regex::new(r###"<span style='font-style: italic;'>(.*)<\/span>"###).unwrap();
-    // let contents = regex.replace_all(contents.as_str(), "*$1*").to_string();
+    let regex = Regex::new(r###"<span style='font-style: italic;'>(.*?)<\/span>"###).unwrap();
+    let mut contents = regex.replace_all(contents.as_str(), "*$1*").to_string();
 
     // Remove the spurrious <p class="xxx">
     let p_classes = vec!["Author", "Text", "Input", "Output"];
