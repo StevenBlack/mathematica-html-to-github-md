@@ -12,7 +12,7 @@ fn main() {
     let file_path = &args[1];
 
     let contents = fs::read_to_string(file_path)
-        .expect("Unable to read the file");
+        .expect("Unable to read the input file");
 
     // clean up excessive blank lines
     let contents = contents.replace("\n\n\n\n", "\n\n");
@@ -36,31 +36,35 @@ fn main() {
     }
 
     // Back into a String
-    let contents = lines.join("\n");
+    let mut contents = lines.join("\n");
 
-    // let classes = vec!["Title", "Section", "Subsection", "Subsubsection"];
-    // let markdown = ["#", "##", "###", "####"];
+    // Transform the headings
+    let headings = vec![
+        ("Title", "#"),
+        ("Section", "##"),
+        ("Subsection", "###"),
+        ("Subsubsection", "####"),
+    ];
+    for heading in headings {
+        // let s3: String = format!("{}{}", s1, s2);
+        let foo2 = format!(r###"<p class="{}">\n(.*)\n<\/p>"###, heading.0);
+        let regex = Regex::new(foo2.as_str()).unwrap();
+        // contents = regex.replace_all(contents.as_str(), "#$1").to_string();
+        contents = regex.replace_all(contents.as_str(), format!(r"{}$1", heading.1)).to_string();
+    }
 
-
-    let regex = Regex::new(r###"<p class="Title">\n(.*)\n<\/p>"###).unwrap();
-    let contents = regex.replace_all(contents.as_str(), "#$1").to_string();
-
-    let regex = Regex::new(r###"<p class="Section">\n(.*)\n<\/p>"###).unwrap();
-    let contents = regex.replace_all(contents.as_str(), "##$1").to_string();
-
-    let regex = Regex::new(r###"<p class="Subsection">\n(.*)\n<\/p>"###).unwrap();
-    let contents = regex.replace_all(contents.as_str(), "###$1").to_string();
-
-    let regex = Regex::new(r###"<p class="Subsubsection">\n(.*)\n<\/p>"###).unwrap();
-    let contents = regex.replace_all(contents.as_str(), "####$1").to_string();
-
+    // Transform Subtitle classes
     let regex = Regex::new(r###"<p class="Subtitle">\n (.*)\n<\/p>"###).unwrap();
     let contents = regex.replace_all(contents.as_str(), "**$1**").to_string();
 
+    // Transform ordered lists
     let regex = Regex::new(r###"<p class="ItemNumbered">\n(.*)\n<\/p>\n"###).unwrap();
     let contents = regex.replace_all(contents.as_str(), "1.$1").to_string();
 
-    println!("{contents}");
+    // Transform bold text
+    let regex = Regex::new(r###"<span style='font-weight: bold;'>(.*)<\/span>"###).unwrap();
+    let contents = regex.replace_all(contents.as_str(), "**$1**").to_string();
 
+    println!("{contents}");
 
 }
