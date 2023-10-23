@@ -1,6 +1,6 @@
 # 🤓 Mathematica HTML To GitHub Markdown
 
-This is a personal project to convert Mathematica HTML files to Github Markdown.  
+This is a personal project to convert Mathematica HTML files to Github Markdown.
 This code is not very robust. It's also not very general.
 
 Motivation: I wanted a nice way to convert my Mathematica notebooks, when saved as HTML, to Github Markdown.
