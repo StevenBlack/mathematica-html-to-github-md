@@ -47,8 +47,8 @@ fn main() {
     ];
     for heading in headings {
         // let s3: String = format!("{}{}", s1, s2);
-        let foo2 = format!(r###"<p class="{}">\n(.*)\n<\/p>"###, heading.0);
-        let regex = Regex::new(foo2.as_str()).unwrap();
+        let foo = format!(r###"<p class="{}">\n(.*)\n<\/p>"###, heading.0);
+        let regex = Regex::new(foo.as_str()).unwrap();
         // contents = regex.replace_all(contents.as_str(), "#$1").to_string();
         contents = regex.replace_all(contents.as_str(), format!(r"{}$1", heading.1)).to_string();
     }
@@ -67,12 +67,20 @@ fn main() {
 
     // Transform bold text
     let regex = Regex::new(r###"<span style='font-weight: bold;'>(.*)<\/span>"###).unwrap();
-    let contents = regex.replace_all(contents.as_str(), "**$1**").to_string();
+    let mut contents = regex.replace_all(contents.as_str(), "**$1**").to_string();
 
     // Transform italic text
     // need to make this ungreedy
     // let regex = Regex::new(r###"<span style='font-style: italic;'>(.*)<\/span>"###).unwrap();
     // let contents = regex.replace_all(contents.as_str(), "*$1*").to_string();
+
+    // Remove the spurrious <p class="xxx">
+    let p_classes = vec!["Author", "Text", "Input", "Output"];
+    for p_class in p_classes {
+        let foo = format!(r###"<p class="{}">\n(.*)\n<\/p>"###, p_class);
+        let regex = Regex::new(foo.as_str()).unwrap();
+        contents = regex.replace_all(contents.as_str(), "$1").trim().to_string();
+    }
 
     println!("{contents}");
 
