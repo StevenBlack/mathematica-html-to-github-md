@@ -59,11 +59,20 @@ fn main() {
 
     // Transform ordered lists
     let regex = Regex::new(r###"<p class="ItemNumbered">\n(.*)\n<\/p>\n"###).unwrap();
-    let contents = regex.replace_all(contents.as_str(), "1.$1").to_string();
+    let contents = regex.replace_all(contents.as_str(), "1.$1\n").to_string();
+
+    // Transform italic and bold text
+    let regex = Regex::new(r###"<span style='font-style: italic;font-weight: bold;'>(.*)<\/span>"###).unwrap();
+    let contents = regex.replace_all(contents.as_str(), "***$1***").to_string();
 
     // Transform bold text
     let regex = Regex::new(r###"<span style='font-weight: bold;'>(.*)<\/span>"###).unwrap();
     let contents = regex.replace_all(contents.as_str(), "**$1**").to_string();
+
+    // Transform italic text
+    // need to make this ungreedy
+    // let regex = Regex::new(r###"<span style='font-style: italic;'>(.*)<\/span>"###).unwrap();
+    // let contents = regex.replace_all(contents.as_str(), "*$1*").to_string();
 
     println!("{contents}");
 
