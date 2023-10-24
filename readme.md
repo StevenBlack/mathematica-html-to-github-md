@@ -1,14 +1,25 @@
 # 🤓 Mathematica HTML To GitHub Markdown
 
-This is a personal project to convert Mathematica HTML files to Github Markdown.
-This code is not very robust. It's also not very general.
+This is a personal project to convert some of my Mathematica "Save As" HTML
+to Github Markdown. I want to do this so I can easily share Mathematica
+notebooks on Github, specifically with an auto-generated readme that reflects
+the current state of the notebook.
 
-Motivation: I wanted a nice way to convert my Mathematica notebooks, when saved as HTML, to Github Markdown.
-I wanted to do this so I could easily share my Mathematica notebooks on Github with an auto-generated readme
-that reflects the current state of the notebook.
+**Warning**: This code is not very robust. It's also not very general.
 
-Sample call:
+## Usage
+
+These instructions presume you have a Mathematica notebook saved as HTML.
+
+1. [Install Rust](https://www.rust-lang.org/tools/install)
+2. Clone this repository.
+3. `cd` into the repository.
+3. Run `cargo run <path-to-html-file> > <path-to-markdown-file>`
+
+Like this, for example:
 
 ```bash
-cargo run /Users/steve/Dropbox/btc/bitcoin-energy-estimates/bitcoin-energy-estimates.htm > /Users/steve/Dropbox/btc/bitcoin-energy-estimates/readme.md
+cargo run ~/projects/notebook.htm > ~/projects/readme.md
 ```
+
+Now your markdown file should be ready to go!
