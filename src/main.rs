@@ -38,14 +38,33 @@ fn main() {
     // Back into a String
     let mut contents = lines.join("\n");
 
-    // Transform the headings
-    let headings = vec![
-        ("Title", "#"),
-        ("Section", "##"),
-        ("Subsection", "###"),
-        ("Subsubsection", "####"),
+
+    // Here we audit Mathematica's HTML document for headings used, assigning one of GitHub's
+    // markup headings to each one used.
+
+    // Here's Mathematica's heading hierarchy
+    let mathematica_headings = vec![
+        "Title",
+        "Chapter",
+        "Section",
+        "Subsection",
+        "Subsubsection",
     ];
-    for heading in headings {
+
+    // GitHub supports 6-levels of heading ("#" to "######")
+    let mut gh_level = 1;
+
+    let mut doc_headings: Vec<(String, String)> = vec![];
+
+    for m_heading in mathematica_headings {
+        let test = r##"<p class=""##.to_owned() + m_heading + r##"">"##;
+        if contents.contains(test.as_str()) {
+            doc_headings.push((m_heading.to_string(), "#".repeat(gh_level).to_string()));
+            gh_level = gh_level + 1;
+        }
+    }
+
+    for heading in doc_headings {
         // let s3: String = format!("{}{}", s1, s2);
         let foo = format!(r###"<p class="{}">\n(.*)\n<\/p>"###, heading.0);
         let regex = Regex::new(foo.as_str()).unwrap();
