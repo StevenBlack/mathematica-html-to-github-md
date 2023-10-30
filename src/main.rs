@@ -92,7 +92,7 @@ fn main() {
     let mut contents = regex.replace_all(contents.as_str(), "*$1*").to_string();
 
     // Remove the spurrious <p class="xxx">
-    let p_classes = vec!["Author", "Text", "Input", "Output"];
+    let p_classes = vec!["Author", "Text"];
     for p_class in p_classes {
         let foo = format!(r###"<p class="{}">\n(.*)\n<\/p>"###, p_class);
         let regex = Regex::new(foo.as_str()).unwrap();
